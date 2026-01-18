@@ -356,6 +356,19 @@ STICKER_ID = "CAACAgUAAyEFAATMbkDHAAMhaWw7tqBC9qpcCCfOSrLEhWRTWRQAAtAVAAKRZVBUFI
 @bot.message_handler(commands=['sticker'])
 def send_sticker(msg):
     bot.send_sticker(msg.chat.id, STICKER_ID)
+
+
+# Greet new members with their ID
+@bot.message_handler(content_types=["new_chat_members"])
+def greet_new_members(msg):
+    for user in msg.new_chat_members:
+        bot.send_message(
+            msg.chat.id,
+            f"👋 Welcome {user.first_name}!\n"
+            f"🆔 ID: `{user.id}`",
+            parse_mode="Markdown"
+        )
+
 # Keep the bot running
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
