@@ -356,6 +356,20 @@ STICKER_ID = "CAACAgUAAyEFAATMbkDHAAMhaWw7tqBC9qpcCCfOSrLEhWRTWRQAAtAVAAKRZVBUFI
 @bot.message_handler(commands=['sticker'])
 def send_sticker(msg):
     bot.send_sticker(msg.chat.id, STICKER_ID)
+# Keep the bot running
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
+
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"ok")
+
+def run_server():
+    HTTPServer(("0.0.0.0", 8080), Handler).serve_forever()
+
+threading.Thread(target=run_server, daemon=True).start()
 
 
 bot.infinity_polling()
